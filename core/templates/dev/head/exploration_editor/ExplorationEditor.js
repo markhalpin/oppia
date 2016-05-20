@@ -22,7 +22,7 @@ oppia.constant('GADGET_SPECS', GLOBALS.GADGET_SPECS);
 oppia.constant('PANEL_SPECS', GLOBALS.PANEL_SPECS);
 
 oppia.controller('ExplorationEditor', [
-  '$scope', '$http', '$window', '$rootScope', '$log', '$timeout',
+  '$scope', '$http', '$window', '$modal', '$rootScope', '$log', '$timeout',
   'explorationData', 'editorContextService', 'explorationTitleService',
   'explorationCategoryService', 'explorationGadgetsService',
   'explorationObjectiveService', 'explorationLanguageCodeService',
@@ -31,9 +31,9 @@ oppia.controller('ExplorationEditor', [
   'routerService', 'graphDataService', 'stateEditorTutorialFirstTimeService',
   'explorationParamSpecsService', 'explorationParamChangesService',
   'explorationWarningsService', '$templateCache', 'explorationContextService',
-  'explorationAdvancedFeaturesService', '$modal',
+  'explorationAdvancedFeaturesService', 'EditorModeService',
   function(
-      $scope, $http, $window, $rootScope, $log, $timeout,
+      $scope, $http, $window, $modal, $rootScope, $log, $timeout,
       explorationData, editorContextService, explorationTitleService,
       explorationCategoryService, explorationGadgetsService,
       explorationObjectiveService, explorationLanguageCodeService,
@@ -42,12 +42,13 @@ oppia.controller('ExplorationEditor', [
       routerService, graphDataService, stateEditorTutorialFirstTimeService,
       explorationParamSpecsService, explorationParamChangesService,
       explorationWarningsService, $templateCache, explorationContextService,
-      explorationAdvancedFeaturesService, $modal) {
+      explorationAdvancedFeaturesService, EditorModeService) {
     $scope.editabilityService = editabilityService;
     $scope.editorContextService = editorContextService;
 
     $scope.areGadgetsEnabled = (
       explorationAdvancedFeaturesService.areGadgetsEnabled);
+    $scope.getEditorMode = EditorModeService.getMode;
 
     /**********************************************************
      * Called on initial load of the exploration editor page.
@@ -153,9 +154,6 @@ oppia.controller('ExplorationEditor', [
         if (successCallback) {
           successCallback();
         }
-
-        stateEditorTutorialFirstTimeService.init(
-          data.show_state_editor_tutorial_on_load);
       });
     };
 

@@ -399,7 +399,12 @@
       </div>
 
       <div ng-show="getTabStatuses().active === 'main'">
-        {% include 'exploration_editor/main_tab/main_tab.html' %}
+        <div ng-show="getEditorMode() === 'simple'">
+          {% include 'exploration_editor/simple_editor_tab/simple_editor_tab.html' %}
+        </div>
+        <div ng-show="getEditorMode() === 'full'">
+          {% include 'exploration_editor/main_tab/main_tab.html' %}
+        </div>
       </div>
 
       <!-- This is an ng-if, so that the preview loads the latest version of the exploration each time the tab is accessed. -->
@@ -477,6 +482,7 @@
     {{ value_generators_js }}
 
     {{ include_js_file('exploration_editor/ExplorationEditor.js') }}
+    {{ include_js_file('exploration_editor/EditorModeService.js') }}
     {{ include_js_file('exploration_editor/EditorServices.js') }}
     {{ include_js_file('exploration_editor/ExplorationEditorAdvancedFeaturesService.js') }}
     {{ include_js_file('exploration_editor/GadgetValidationService.js') }}
@@ -517,6 +523,8 @@
     {{ include_js_file('exploration_editor/main_tab/StateParameterChanges.js') }}
     {{ include_js_file('exploration_editor/main_tab/StateResponses.js') }}
     {{ include_js_file('exploration_editor/main_tab/StateStatistics.js') }}
+
+    {{ include_js_file('exploration_editor/simple_editor_tab/SimpleEditorTab.js') }}
 
     {{ include_js_file('exploration_editor/preview_tab/PreviewTab.js') }}
     {{ include_js_file('exploration_editor/statistics_tab/StatisticsTab.js') }}
