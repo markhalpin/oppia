@@ -1,0 +1,89 @@
+<script type="text/ng-template" id="editor/simpleEditorTab">
+  <div style="height: 100%;">
+    <div class="sidebar">
+      <ul>
+        <li>
+          <a href="#">Title</a>
+        </li>
+        <li>
+          <a href="#">Introduction</a>
+        </li>
+      </ul>
+
+      <button type="button" class="btn btn-default full-editor-btn" ng-click="setEditorModeToFull()">
+        Use Advanced Editor
+      </button>
+    </div>
+
+    <div class="main">
+      <div class="content">
+        <div class="header">
+          What would you like to teach?
+        </div>
+      </div>
+      <button type="button" class="btn btn-default advance-btn" ng-click="goForward()">
+        <i class="material-icons md-24">&#xE5CF;</i>
+      </button>
+    </div>
+  </div>
+</script>
+
+<style>
+  simple-editor-tab .sidebar {
+    background-color: #f3fbf1;
+    height: 100%;
+    left: 0;
+    padding: 50px 30px;
+    position: fixed;
+    /* This must match the 'margin-left' of the .main class. */
+    width: 250px;
+  }
+  simple-editor-tab .sidebar ul {
+    font-size: 1.0em;
+    font-weight: bold;
+    line-height: 2.5em;
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+  }
+  simple-editor-tab .sidebar a {
+    color: #333;
+  }
+
+  simple-editor-tab .full-editor-btn {
+    margin-top: 50px;
+  }
+
+  simple-editor-tab .main {
+    background-color: #fff;
+    height: 100%;
+    /* This must match the 'width' of the .main class. */
+    margin-left: 250px;
+    min-height: 2000px;
+    position: relative;
+    text-align: center;
+    width: calc(100% - 250px);
+  }
+  simple-editor-tab .main .content {
+    margin: 0 auto;
+    max-width: 700px;
+    padding-top: 100px;
+    text-align: left;
+    width: calc(100% - 40px);
+  }
+  simple-editor-tab .main .content .header {
+    font-weight: bold;
+  }
+
+  simple-editor-tab .advance-btn {
+    border: 1px solid #888;
+    border-radius: 50%;
+    bottom: 50px;
+    height: 50px;
+    position: fixed;
+    width: 50px;
+  }
+  simple-editor-tab .advance-btn i {
+    margin: 6px auto;
+  }
+</style>

@@ -13,12 +13,22 @@
 // limitations under the License.
 
 /**
- * @fileoverview Controllers for the simple editor tab in the exploration
+ * @fileoverview Directive for the "simple editor" tab in the exploration
  * editor.
  */
 
-oppia.controller('SimpleEditorTab', [
-  '$scope', 'EditorModeService', function($scope, EditorModeService) {
-    $scope.setEditorModeToFull = EditorModeService.setModeToFull;
+oppia.directive('simpleEditorTab', [function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'editor/simpleEditorTab',
+    controller: [
+      '$scope', 'EditorModeService', function($scope, EditorModeService) {
+        $scope.setEditorModeToFull = EditorModeService.setModeToFull;
+
+        $scope.stuff = [];
+        for (var i = 0; i < 1000; i++)
+          $scope.stuff.push('a');
+      }
+    ]
   }
-]);
+}]);

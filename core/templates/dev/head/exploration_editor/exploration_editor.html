@@ -388,7 +388,10 @@
       </div>
     </script>
 
-    <div class="container-fluid oppia-editor-page-container" ng-joy-ride="tutorialInProgress" config="EDITOR_TUTORIAL_OPTIONS" on-finish="onLeaveTutorial()" on-skip="onLeaveTutorial()">
+    <div ng-joy-ride="tutorialInProgress"
+         config="EDITOR_TUTORIAL_OPTIONS"
+         on-finish="onLeaveTutorial()"
+         on-skip="onLeaveTutorial()">
       <div class="row" ng-if="explorationRightsService.isCloned()">
         <div class="col-lg-12 col-md-12 col-sm-12">
           <div class="oppia-align-center alert alert-warning" style="padding: 2px; width: 90%;">
@@ -400,7 +403,7 @@
 
       <div ng-show="getTabStatuses().active === 'main'">
         <div ng-show="getEditorMode() === 'simple'">
-          {% include 'exploration_editor/simple_editor_tab/simple_editor_tab.html' %}
+          <simple-editor-tab></simple-editor-tab>
         </div>
         <div ng-show="getEditorMode() === 'full'">
           {% include 'exploration_editor/main_tab/main_tab.html' %}
@@ -432,7 +435,7 @@
   </div>
 
   <!-- These definitions must be included exactly once on the page for the graph SVGs to work in Firefox. -->
-  <svg width="0" height="0">
+  <svg width="0" height="0" style="display: none;">
     <defs>
       <marker id="arrowhead" viewBox="0 0 18 18" refX="10" refY="3"
               markerWidth="10" markerHeight="6" orient="auto">
@@ -469,6 +472,8 @@
   {% include 'components/rule_editor_directive.html' %}
   {% include 'components/sharing_links_directive.html' %}
   {% include 'components/state_graph_viz_directive.html' %}
+
+  {% include 'exploration_editor/simple_editor_tab/simple_editor_tab_directive.html' %}
 
   {% include 'player/answer_feedback_pair_directive.html' %}
   {% include 'player/conversation_skin_directive.html' %}
@@ -524,7 +529,7 @@
     {{ include_js_file('exploration_editor/main_tab/StateResponses.js') }}
     {{ include_js_file('exploration_editor/main_tab/StateStatistics.js') }}
 
-    {{ include_js_file('exploration_editor/simple_editor_tab/SimpleEditorTab.js') }}
+    {{ include_js_file('exploration_editor/simple_editor_tab/SimpleEditorTabDirective.js') }}
 
     {{ include_js_file('exploration_editor/preview_tab/PreviewTab.js') }}
     {{ include_js_file('exploration_editor/statistics_tab/StatisticsTab.js') }}
