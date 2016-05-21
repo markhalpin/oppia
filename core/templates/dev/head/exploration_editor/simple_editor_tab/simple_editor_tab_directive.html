@@ -8,6 +8,9 @@
         <li>
           <a href="#">Introduction</a>
         </li>
+        <li>
+          <a href="#">Question 1</a>
+        </li>
       </ul>
 
       <button type="button" class="btn btn-default full-editor-btn" ng-click="setEditorModeToFull()">
@@ -20,6 +23,23 @@
         <div class="header">
           What would you like to teach?
         </div>
+        <plaintext-field displayed-value="explorationTitleService.displayed"
+                         on-finish-editing="explorationTitleService.saveDisplayedValue()">
+        </plaintext-field>
+
+        <div class="header">
+          Introduction
+        </div>
+        <html-field displayed-value="initStateContent"
+                    on-finish-editing="saveInitStateContent()">
+        </html-field>
+
+        <div class="header">
+          Question
+        </div>
+        <html-field displayed-value="secondStateContent"
+                    on-finish-editing="saveSecondStateContent()">
+        </html-field>
       </div>
       <button type="button" class="btn btn-default advance-btn" ng-click="goForward()">
         <i class="material-icons md-24">&#xE5CF;</i>
@@ -73,6 +93,8 @@
   }
   simple-editor-tab .main .content .header {
     font-weight: bold;
+    margin-bottom: 40px;
+    margin-top: 80px;
   }
 
   simple-editor-tab .advance-btn {

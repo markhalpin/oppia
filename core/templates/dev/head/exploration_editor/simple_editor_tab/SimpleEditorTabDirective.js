@@ -22,13 +22,23 @@ oppia.directive('simpleEditorTab', [function() {
     restrict: 'E',
     templateUrl: 'editor/simpleEditorTab',
     controller: [
-      '$scope', 'EditorModeService', function($scope, EditorModeService) {
+      '$scope', 'EditorModeService', 'explorationTitleService',
+      function($scope, EditorModeService, explorationTitleService) {
         $scope.setEditorModeToFull = EditorModeService.setModeToFull;
+        $scope.explorationTitleService = explorationTitleService;
 
-        $scope.stuff = [];
-        for (var i = 0; i < 1000; i++)
-          $scope.stuff.push('a');
+        $scope.saveDisplayedTitle = function() {
+          explorationTitleService.saveDisplayedValue();
+        };
+
+        $scope.initStateContent = 'This is an introduction.';
+        $scope.saveInitStateContent = function() {
+        };
+
+        $scope.secondStateContent = 'This is a question.';
+        $scope.saveSecondStateContent = function() {
+        };
       }
     ]
-  }
+  };
 }]);

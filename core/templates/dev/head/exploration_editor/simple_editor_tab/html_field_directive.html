@@ -1,0 +1,21 @@
+<script type="text/ng-template" id="editor/htmlField">
+  <div ng-show="!inEditMode" ng-click="startEditing()"
+       class="view-only">
+    <span angular-html-bind="displayedValue"></span>
+  </div>
+
+  <div ng-show="inEditMode">
+    <schema-based-editor schema="SCHEMA" local-value="displayedValue"
+                         focus-on="<[focusLabel]>">
+    </schema-based-editor>
+    <button type="button" ng-click="finishEditing()">Save</button>
+  </div>
+</script>
+
+<style>
+  html-field .view-only {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    padding: 10px 20px;
+  }
+</style>
