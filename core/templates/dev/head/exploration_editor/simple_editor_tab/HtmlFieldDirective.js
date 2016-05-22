@@ -22,12 +22,19 @@ oppia.directive('htmlField', [function() {
     templateUrl: 'editor/htmlField',
     scope: {
       displayedValue: '=',
+      identifier: '@',
       onFinishEditing: '&'
     },
     controller: ['$scope', 'focusService', function($scope, focusService) {
       $scope.SCHEMA = {
         type: 'html'
       };
+
+      $scope.$on('externalOpen', function(evt, identifier) {
+        if (identifier === $scope.identifier) {
+          $scope.startEditing();
+        }
+      });
 
       $scope.inEditMode = false;
       $scope.focusLabel = focusService.generateFocusLabel();
@@ -40,6 +47,7 @@ oppia.directive('htmlField', [function() {
       $scope.finishEditing = function() {
         $scope.inEditMode = false;
         $scope.onFinishEditing();
+        $scope.$emit('fieldEditorClosed', $scope.identifier);
       };
     }]
   };

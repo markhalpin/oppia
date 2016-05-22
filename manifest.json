@@ -78,6 +78,16 @@
           ]
         }
       },
+      "angularScroll": {
+        "version": "1.0.0",
+        "downloadFormat": "zip",
+        "url": "https://github.com/oblador/angular-scroll/archive/v1.0.0.zip",
+        "rootDirPrefix": "angular-scroll-",
+        "targetDirPrefix": "angular-scroll-",
+        "bundle": {
+          "js": ["angular-scroll.min.js"]
+        }
+      },
       "angularTest": {
         "version": "1.4.7",
         "downloadFormat": "files",

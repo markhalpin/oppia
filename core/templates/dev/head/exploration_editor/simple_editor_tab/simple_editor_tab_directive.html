@@ -2,14 +2,12 @@
   <div style="height: 100%;">
     <div class="sidebar">
       <ul>
-        <li>
-          <a href="#">Title</a>
-        </li>
-        <li>
-          <a href="#">Introduction</a>
-        </li>
-        <li>
-          <a href="#">Question 1</a>
+        <li class="sidebar-item" ng-repeat="field in fields track by $index">
+          <a ng-if="scrollSpyIsActive" du-smooth-scroll="<[field.id]>"
+             du-scrollspy ng-attr-offset="<[defaultScrollOffset]>">
+            <[field.sidebarLabel]>
+          </a>
+          <a ng-if="!scrollSpyIsActive"><[field.sidebarLabel]></a>
         </li>
       </ul>
 
@@ -20,24 +18,30 @@
 
     <div class="main">
       <div class="content">
-        <div class="header">
+        <div style="height: <[defaultScrollOffset]>px;">
+        </div>
+
+        <div class="header" id="<[fields[0].id]>">
           What would you like to teach?
         </div>
         <plaintext-field displayed-value="explorationTitleService.displayed"
+                         identifier="<[fields[0].id]>"
                          on-finish-editing="explorationTitleService.saveDisplayedValue()">
         </plaintext-field>
 
-        <div class="header">
+        <div class="header" id="<[fields[1].id]>">
           Introduction
         </div>
         <html-field displayed-value="initStateContent"
+                    identifier="<[fields[1].id]>"
                     on-finish-editing="saveInitStateContent()">
         </html-field>
 
-        <div class="header">
-          Question
+        <div class="header" id="<[fields[2].id]>">
+          Question 1
         </div>
         <html-field displayed-value="secondStateContent"
+                    identifier="<[fields[2].id]>"
                     on-finish-editing="saveSecondStateContent()">
         </html-field>
       </div>
@@ -88,6 +92,7 @@
     margin: 0 auto;
     max-width: 700px;
     padding-top: 100px;
+    position: relative;
     text-align: left;
     width: calc(100% - 40px);
   }
@@ -107,5 +112,12 @@
   }
   simple-editor-tab .advance-btn i {
     margin: 6px auto;
+  }
+
+  simple-editor-tab li.sidebar-item .active {
+    text-decoration: underline;
+  }
+  simple-editor-tab li.sidebar-item a:hover {
+    text-decoration: none;
   }
 </style>
