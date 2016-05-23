@@ -16,6 +16,8 @@
 activities.
 """
 
+import copy
+
 from core.controllers import base
 from core.domain import collection_domain
 from core.domain import collection_services
@@ -242,6 +244,21 @@ class NewExploration(base.BaseHandler):
         exploration = exp_domain.Exploration.create_default_exploration(
             new_exploration_id, title, category,
             objective=objective, language_code=language_code)
+
+        first_state = exploration.states[exploration.init_state_name]
+        first_state.update_interaction_id(
+            feconf.DEFAULT_INIT_STATE_INTERACTION_ID)
+        first_state.update_interaction_customization_args(copy.deepcopy(
+            feconf.DEFAULT_INIT_STATE_INTERACTION_CUSTOMIZATION_ARGS))
+        first_state.update_interaction_default_outcome(
+            feconf.DEFAULT_INIT_STATE_DEFAULT_OUTCOME)
+        exploration.add_states([feconf.DEFAULT_SECOND_STATE_NAME])
+        second_state = exploration.states[feconf.DEFAULT_SECOND_STATE_NAME]
+        second_state.update_interaction_id(
+            feconf.DEFAULT_SECOND_STATE_INTERACTION_ID)
+        second_state.update_interaction_customization_args(copy.deepcopy(
+            feconf.DEFAULT_SECOND_STATE_INTERACTION_CUSTOMIZATION_ARGS))
+
         exp_services.save_new_exploration(self.user_id, exploration)
 
         self.render_json({

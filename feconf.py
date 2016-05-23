@@ -78,10 +78,34 @@ COMMIT_LIST_PAGE_SIZE = 50
 # tab.
 FEEDBACK_TAB_PAGE_SIZE = 20
 
-# Default name for the initial state of an exploration.
-DEFAULT_INIT_STATE_NAME = 'First Card'
-# The default content text for the initial state of an exploration.
+# Default properties for the initial state of an exploration.
+DEFAULT_INIT_STATE_NAME = 'Introduction'
 DEFAULT_INIT_STATE_CONTENT_STR = ''
+DEFAULT_INIT_STATE_INTERACTION_ID = 'Continue'
+DEFAULT_INIT_STATE_INTERACTION_CUSTOMIZATION_ARGS = {
+    'buttonText': {
+        'value': 'Continue',
+    }
+}
+
+# Default properties for the second state of an exploration.
+DEFAULT_SECOND_STATE_NAME = 'Question 1'
+DEFAULT_SECOND_STATE_CONTENT_STR = ''
+DEFAULT_SECOND_STATE_INTERACTION_ID = 'MultipleChoiceInput'
+DEFAULT_SECOND_STATE_INTERACTION_CUSTOMIZATION_ARGS = {
+    'choices': {
+        'value': [
+            'Sample multiple-choice answer'
+        ]
+    }
+}
+
+# Default outcome for the initial state.
+DEFAULT_INIT_STATE_DEFAULT_OUTCOME = {
+    'dest': DEFAULT_SECOND_STATE_NAME,
+    'feedback': [],
+    'param_changes': [],
+}
 
 # The threshold the truth value of an evaluated answer group must equal or
 # exceed in order to be considered a better classification than the default
