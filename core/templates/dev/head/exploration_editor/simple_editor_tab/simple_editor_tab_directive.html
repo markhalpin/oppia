@@ -21,29 +21,24 @@
         <div style="height: <[defaultScrollOffset]>px;">
         </div>
 
-        <div class="header" id="<[fields[0].id]>">
-          What would you like to teach?
-        </div>
-        <plaintext-field displayed-value="explorationTitleService.displayed"
-                         identifier="<[fields[0].id]>"
-                         on-finish-editing="explorationTitleService.saveDisplayedValue()">
-        </plaintext-field>
+        <div ng-repeat="field in fields track by $index">
+          <div class="header" id="<[field.id]>">
+            <[field.header]>
+          </div>
 
-        <div class="header" id="<[fields[1].id]>">
-          Introduction
+          <div ng-if="field.directiveName === 'plaintext-field'">
+            <plaintext-field init-displayed-value="field.getInitDisplayedValue()"
+                             identifier="<[field.id]>"
+                             on-finish-editing="field.save">
+            </plaintext-field>
+          </div>
+          <div ng-if="field.directiveName === 'html-field'">
+            <html-field init-displayed-value="field.getInitDisplayedValue()"
+                        identifier="<[field.id]>"
+                        on-finish-editing="field.save">
+            </html-field>
+          </div>
         </div>
-        <html-field displayed-value="initStateContent"
-                    identifier="<[fields[1].id]>"
-                    on-finish-editing="saveInitStateContent()">
-        </html-field>
-
-        <div class="header" id="<[fields[2].id]>">
-          Question 1
-        </div>
-        <html-field displayed-value="secondStateContent"
-                    identifier="<[fields[2].id]>"
-                    on-finish-editing="saveSecondStateContent()">
-        </html-field>
       </div>
       <button type="button" class="btn btn-default advance-btn" ng-click="goForward()">
         <i class="material-icons md-24">&#xE5CF;</i>

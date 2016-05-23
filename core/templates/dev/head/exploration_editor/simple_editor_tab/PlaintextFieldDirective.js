@@ -21,15 +21,18 @@ oppia.directive('plaintextField', [function() {
     restrict: 'E',
     templateUrl: 'editor/plaintextField',
     scope: {
-      displayedValue: '=',
+      initDisplayedValue: '&',
       identifier: '@',
-      onFinishEditing: '&'
+      onFinishEditing: '='
     },
     controller: ['$scope', 'focusService', function($scope, focusService) {
       $scope.inEditMode = false;
       $scope.focusLabel = focusService.generateFocusLabel();
 
+      $scope.displayedValue = $scope.initDisplayedValue();
+
       $scope.$on('externalOpen', function(evt, identifier) {
+        $scope.displayedValue = $scope.initDisplayedValue();
         if (identifier === $scope.identifier) {
           $scope.startEditing();
         }
@@ -42,7 +45,7 @@ oppia.directive('plaintextField', [function() {
 
       $scope.finishEditing = function() {
         $scope.inEditMode = false;
-        $scope.onFinishEditing();
+        $scope.onFinishEditing($scope.displayedValue);
         $scope.$emit('fieldEditorClosed', $scope.identifier);
       };
 

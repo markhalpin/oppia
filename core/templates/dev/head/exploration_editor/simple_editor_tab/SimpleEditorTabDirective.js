@@ -30,11 +30,14 @@ oppia.directive('simpleEditorTab', [function() {
     controller: [
       '$scope', '$document', '$anchorScroll', '$window', '$timeout',
       'EditorModeService', 'explorationTitleService', 'duScrollDuration',
+      'explorationStatesService',
       function(
           $scope, $document, $anchorScroll, $window, $timeout,
-          EditorModeService, explorationTitleService, duScrollDuration) {
+          EditorModeService, explorationTitleService, duScrollDuration,
+          explorationStatesService) {
         $scope.setEditorModeToFull = EditorModeService.setModeToFull;
         $scope.explorationTitleService = explorationTitleService;
+        $scope.fields = [];
 
         $scope.defaultScrollOffset = Math.max(
           100, $window.innerHeight / 2 - 100);
@@ -57,18 +60,6 @@ oppia.directive('simpleEditorTab', [function() {
           $document.scrollToElementAnimated(
             angular.element(document.getElementById(directiveId)),
             $scope.defaultScrollOffset);
-        };
-
-        $scope.saveDisplayedTitle = function() {
-          explorationTitleService.saveDisplayedValue();
-        };
-
-        $scope.initStateContent = '';
-        $scope.saveInitStateContent = function() {
-        };
-
-        $scope.secondStateContent = '';
-        $scope.saveSecondStateContent = function() {
         };
 
         // Navigates to the first field that has not been filled yet, and opens
@@ -102,37 +93,72 @@ oppia.directive('simpleEditorTab', [function() {
           }
         });
 
-        $scope.fields = [{
-          id: 'titleId',
-          fieldDirective: 'plaintext-field',
-          sidebarLabel: 'Title',
-          isValid: function() {
-            return !!explorationTitleService.savedMemento;
-          }
-        }, {
-          id: 'introId',
-          fieldDirective: 'html-field',
-          sidebarLabel: 'Introduction',
-          isValid: function() {
-            console.log('aaa');
-            // REDO
-            return !!$scope.initStateContent;
-          }
-        }, {
-          id: 'question1Id',
-          fieldDirective: 'html-field',
-          sidebarLabel: 'Question 1',
-          isValid: function() {
-            // REDO
-            return !!$scope.secondStateContent;
-          }
-        }];
+        $scope.$on('refreshStateEditor', function() {
+          $scope.initStateEditor();
+        });
 
-        // Give the page a little while to load, then scroll so that the first
-        // element is in focus.
-        $timeout(function() {
-          scrollToElement($scope.fields[0].id);
-        }, 50);
+        $scope.initStateEditor = function() {
+          $scope.fields = [{
+            id: 'titleId',
+            directiveName: 'plaintext-field',
+            header: 'What would you like to teach?',
+            sidebarLabel: 'Title',
+            getInitDisplayedValue: function() {
+              return explorationTitleService.displayed;
+            },
+            isValid: function() {
+              return !!explorationTitleService.savedMemento;
+            },
+            save: function(newValue) {
+              explorationTitleService.displayed = newValue;
+              explorationTitleService.saveDisplayedValue();
+            }
+          }, {
+            id: 'introId',
+            directiveName: 'html-field',
+            header: 'Introduction',
+            sidebarLabel: 'Introduction',
+            getInitDisplayedValue: function() {
+              return explorationStatesService.getState(
+                'Introduction').content[0].value;
+            },
+            isValid: function() {
+              return !!explorationStatesService.getState(
+                'Introduction').content[0].value;
+            },
+            save: function(newValue) {
+              // REDO to also use changeListService.
+              var stateData = explorationStatesService.getState('Introduction');
+              stateData.content[0].value = newValue;
+              explorationStatesService.setState('Introduction', stateData);
+            }
+          }, {
+            id: 'question1Id',
+            directiveName: 'html-field',
+            header: 'Question 1',
+            sidebarLabel: 'Question 1',
+            getInitDisplayedValue: function() {
+              return explorationStatesService.getState(
+                'Question 1').content[0].value;
+            },
+            isValid: function() {
+              return !!explorationStatesService.getState(
+                'Question 1').content[0].value;
+            },
+            save: function(newValue) {
+              // REDO to also use changeListService.
+              var stateData = explorationStatesService.getState('Question 1');
+              stateData.content[0].value = newValue;
+              explorationStatesService.setState('Question 1', stateData);
+            }
+          }];
+
+          // Give the page a little while to load, then scroll so that the first
+          // element is in focus.
+          $timeout(function() {
+            scrollToElement($scope.fields[0].id);
+          }, 50);
+        };
       }
     ]
   };
