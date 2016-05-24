@@ -2,7 +2,8 @@
   <div style="height: 100%;">
     <div class="sidebar">
       <ul>
-        <li class="sidebar-item" ng-repeat="field in fields track by $index">
+        <li class="sidebar-item" ng-repeat="field in fields track by $index"
+            ng-class="{'sidebar-item-indented': field.indentSidebarLabel}">
           <a ng-if="scrollSpyIsActive" du-smooth-scroll="<[field.id]>"
              du-scrollspy ng-attr-offset="<[defaultScrollOffset]>">
             <[field.sidebarLabel]>
@@ -109,10 +110,14 @@
     margin: 6px auto;
   }
 
-  simple-editor-tab li.sidebar-item .active {
+  simple-editor-tab li.sidebar-item a.active,
+  simple-editor-tab li.sidebar-item a.active:hover {
     text-decoration: underline;
   }
   simple-editor-tab li.sidebar-item a:hover {
     text-decoration: none;
+  }
+  simple-editor-tab li.sidebar-item-indented {
+    margin-left: 25px;
   }
 </style>

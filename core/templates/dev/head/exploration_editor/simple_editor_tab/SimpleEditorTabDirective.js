@@ -80,13 +80,16 @@ oppia.directive('simpleEditorTab', [function() {
           evt.stopPropagation();
           for (var i = 0; i < $scope.fields.length; i++) {
             if ($scope.fields[i].id === identifier) {
-              // If the field value is not valid, scroll to the next field and
-              // open it. Otherwise, return without doing anything.
+              // If the field value is not valid, scroll to the next field and,
+              // if it is not valid, open it. Otherwise, return without doing
+              // anything.
               if ($scope.fields[i].isValid() && i + 1 < $scope.fields.length) {
                 scrollToElement($scope.fields[i + 1].id);
-                $timeout(function() {
-                  $scope.$broadcast('externalOpen', $scope.fields[i + 1].id);
-                }, duScrollDuration);
+                if (!$scope.fields[i + 1].isValid()) {
+                  $timeout(function() {
+                    $scope.$broadcast('externalOpen', $scope.fields[i + 1].id);
+                  }, duScrollDuration);
+                }
               }
               return;
             }
@@ -103,6 +106,7 @@ oppia.directive('simpleEditorTab', [function() {
             directiveName: 'plaintext-field',
             header: 'What would you like to teach?',
             sidebarLabel: 'Title',
+            indentSidebarLabel: false,
             getInitDisplayedValue: function() {
               return explorationTitleService.displayed;
             },
@@ -118,38 +122,83 @@ oppia.directive('simpleEditorTab', [function() {
             directiveName: 'html-field',
             header: 'Introduction',
             sidebarLabel: 'Introduction',
+            indentSidebarLabel: false,
             getInitDisplayedValue: function() {
-              return explorationStatesService.getState(
-                'Introduction').content[0].value;
+              return explorationStatesService.getStateContentMemento(
+                'Introduction')[0].value;
             },
             isValid: function() {
-              return !!explorationStatesService.getState(
-                'Introduction').content[0].value;
+              return !!explorationStatesService.getStateContentMemento(
+                'Introduction')[0].value;
             },
             save: function(newValue) {
-              // REDO to also use changeListService.
-              var stateData = explorationStatesService.getState('Introduction');
-              stateData.content[0].value = newValue;
-              explorationStatesService.setState('Introduction', stateData);
+              explorationStatesService.saveStateContent(
+                'Introduction', [{
+                  type: 'text',
+                  value: newValue
+                }]
+              );
             }
           }, {
             id: 'question1Id',
             directiveName: 'html-field',
             header: 'Question 1',
             sidebarLabel: 'Question 1',
+            indentSidebarLabel: false,
             getInitDisplayedValue: function() {
-              return explorationStatesService.getState(
-                'Question 1').content[0].value;
+              return explorationStatesService.getStateContentMemento(
+                'Question 1')[0].value;
             },
             isValid: function() {
-              return !!explorationStatesService.getState(
-                'Question 1').content[0].value;
+              return !!explorationStatesService.getStateContentMemento(
+                'Question 1')[0].value;
             },
             save: function(newValue) {
-              // REDO to also use changeListService.
-              var stateData = explorationStatesService.getState('Question 1');
-              stateData.content[0].value = newValue;
-              explorationStatesService.setState('Question 1', stateData);
+              explorationStatesService.saveStateContent(
+                'Question 1', [{
+                  type: 'text',
+                  value: newValue
+                }]
+              );
+            }
+          }, {
+            id: 'question1Prompt',
+            directiveName: 'prompt-field',
+            header: 'Prompt',
+            sidebarLabel: 'Prompt',
+            indentSidebarLabel: true,
+            getInitDisplayedValue: function() {
+            },
+            isValid: function() {
+            },
+            // Takes a dict whose keys are a subset of interactionId or
+            // interactionCustomizationArgs, and whose values are the
+            // corresponding values to change these to.
+            save: function() {
+            }
+          }, {
+            id: 'question1CorrectAnswer',
+            directiveName: 'correct-answer-field',
+            header: 'Correct Answer',
+            sidebarLabel: 'Correct Answer',
+            indentSidebarLabel: true,
+            getInitDisplayedValue: function() {
+            },
+            isValid: function() {
+            },
+            save: function() {
+            }
+          }, {
+            id: 'question1Hint',
+            directiveName: 'hint-field',
+            header: 'Hint',
+            sidebarLabel: 'Hint',
+            indentSidebarLabel: true,
+            getInitDisplayedValue: function() {
+            },
+            isValid: function() {
+            },
+            save: function() {
             }
           }];
 
