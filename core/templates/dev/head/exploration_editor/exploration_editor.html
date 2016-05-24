@@ -476,6 +476,8 @@
   {% include 'exploration_editor/simple_editor_tab/simple_editor_tab_directive.html' %}
   {% include 'exploration_editor/simple_editor_tab/plaintext_field_directive.html' %}
   {% include 'exploration_editor/simple_editor_tab/html_field_directive.html' %}
+  {% include 'exploration_editor/simple_editor_tab/interaction_selector_directive.html' %}
+  {% include 'exploration_editor/simple_editor_tab/multiple_choice_prompt_directive.html' %}
 
   {% include 'player/answer_feedback_pair_directive.html' %}
   {% include 'player/conversation_skin_directive.html' %}
@@ -534,6 +536,8 @@
     {{ include_js_file('exploration_editor/simple_editor_tab/SimpleEditorTabDirective.js') }}
     {{ include_js_file('exploration_editor/simple_editor_tab/PlaintextFieldDirective.js') }}
     {{ include_js_file('exploration_editor/simple_editor_tab/HtmlFieldDirective.js') }}
+    {{ include_js_file('exploration_editor/simple_editor_tab/InteractionSelectorDirective.js') }}
+    {{ include_js_file('exploration_editor/simple_editor_tab/MultipleChoicePromptDirective.js') }}
 
     {{ include_js_file('exploration_editor/preview_tab/PreviewTab.js') }}
     {{ include_js_file('exploration_editor/statistics_tab/StatisticsTab.js') }}

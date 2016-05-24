@@ -39,6 +39,18 @@
                         on-finish-editing="field.save">
             </html-field>
           </div>
+          <div ng-if="field.directiveName === 'interaction-selector'">
+            <interaction-selector init-displayed-value="field.getInitDisplayedValue()"
+                                  identifier="<[field.id]>"
+                                  on-finish-editing="field.save">
+            </interaction-selector>
+          </div>
+          <div ng-if="field.directiveName === 'multiple-choice-prompt-field'">
+            <multiple-choice-prompt init-displayed-value="field.getInitDisplayedValue()"
+                                    identifier="<[field.id]>"
+                                    on-finish-editing="field.save">
+            </multiple-choice-prompt>
+          </div>
         </div>
       </div>
       <button type="button" class="btn btn-default advance-btn" ng-click="goForward()">

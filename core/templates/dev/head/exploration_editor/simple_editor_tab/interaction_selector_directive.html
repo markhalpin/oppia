@@ -1,0 +1,7 @@
+<script type="text/ng-template" id="editor/interactionSelector">
+  <select class="form-control"
+          ng-model="displayedInteractionId"
+          ng-change="saveInteractionId()"
+          ng-options="interaction.id as interaction.description for interaction in INTERACTION_DETAILS_LIST">
+  </select>
+</script>

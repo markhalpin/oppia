@@ -66,7 +66,7 @@ oppia.directive('simpleEditorTab', [function() {
         // it.
         $scope.goForward = function() {
           for (var i = 0; i < $scope.fields.length; i++) {
-            if (!$scope.fields[i].isValid()) {
+            if (!$scope.fields[i].isFilledOut()) {
               scrollToElement($scope.fields[i].id);
               $timeout(function() {
                 $scope.$broadcast('externalOpen', $scope.fields[i].id);
@@ -83,9 +83,10 @@ oppia.directive('simpleEditorTab', [function() {
               // If the field value is not valid, scroll to the next field and,
               // if it is not valid, open it. Otherwise, return without doing
               // anything.
-              if ($scope.fields[i].isValid() && i + 1 < $scope.fields.length) {
+              if ($scope.fields[i].isFilledOut() &&
+                  i + 1 < $scope.fields.length) {
                 scrollToElement($scope.fields[i + 1].id);
-                if (!$scope.fields[i + 1].isValid()) {
+                if (!$scope.fields[i + 1].isFilledOut()) {
                   $timeout(function() {
                     $scope.$broadcast('externalOpen', $scope.fields[i + 1].id);
                   }, duScrollDuration);
@@ -110,7 +111,7 @@ oppia.directive('simpleEditorTab', [function() {
             getInitDisplayedValue: function() {
               return explorationTitleService.displayed;
             },
-            isValid: function() {
+            isFilledOut: function() {
               return !!explorationTitleService.savedMemento;
             },
             save: function(newValue) {
@@ -127,7 +128,7 @@ oppia.directive('simpleEditorTab', [function() {
               return explorationStatesService.getStateContentMemento(
                 'Introduction')[0].value;
             },
-            isValid: function() {
+            isFilledOut: function() {
               return !!explorationStatesService.getStateContentMemento(
                 'Introduction')[0].value;
             },
@@ -149,7 +150,7 @@ oppia.directive('simpleEditorTab', [function() {
               return explorationStatesService.getStateContentMemento(
                 'Question 1')[0].value;
             },
-            isValid: function() {
+            isFilledOut: function() {
               return !!explorationStatesService.getStateContentMemento(
                 'Question 1')[0].value;
             },
@@ -162,19 +163,41 @@ oppia.directive('simpleEditorTab', [function() {
               );
             }
           }, {
+            id: 'question1InteractionId',
+            directiveName: 'interaction-selector',
+            header: null,
+            sidebarLabel: null,
+            indentSidebarLabel: null,
+            getInitDisplayedValue: function() {
+              return explorationStatesService.getInteractionIdMemento(
+                'Question 1');
+            },
+            isFilledOut: function() {
+              return !!explorationStatesService.getInteractionIdMemento(
+                'Question 1');
+            },
+            save: function(newValue) {
+              explorationStatesService.saveInteractionId(
+                'Question 1', newValue);
+              // TODO(sll): Fire an event to update the prompt, correct answer
+              // and hint fields.
+            }
+          }, {
             id: 'question1Prompt',
-            directiveName: 'prompt-field',
+            directiveName: 'multiple-choice-prompt',
             header: 'Prompt',
             sidebarLabel: 'Prompt',
             indentSidebarLabel: true,
             getInitDisplayedValue: function() {
+              return explorationStatesService.getInteractionCustomizationArgs(
+                'Question 1');
             },
-            isValid: function() {
+            isFilledOut: function() {
+              // TODO
             },
-            // Takes a dict whose keys are a subset of interactionId or
-            // interactionCustomizationArgs, and whose values are the
-            // corresponding values to change these to.
-            save: function() {
+            save: function(newValue) {
+              explorationStatesService.saveInteractionCustomizationArgs(
+                'Question 1', newValue);
             }
           }, {
             id: 'question1CorrectAnswer',
@@ -184,7 +207,7 @@ oppia.directive('simpleEditorTab', [function() {
             indentSidebarLabel: true,
             getInitDisplayedValue: function() {
             },
-            isValid: function() {
+            isFilledOut: function() {
             },
             save: function() {
             }
@@ -196,7 +219,7 @@ oppia.directive('simpleEditorTab', [function() {
             indentSidebarLabel: true,
             getInitDisplayedValue: function() {
             },
-            isValid: function() {
+            isFilledOut: function() {
             },
             save: function() {
             }
