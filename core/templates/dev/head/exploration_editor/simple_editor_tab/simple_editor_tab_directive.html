@@ -22,7 +22,7 @@
         <div style="height: <[defaultScrollOffset]>px;">
         </div>
 
-        <div ng-repeat="field in fields track by $index">
+        <div ng-repeat="field in fields track by $index" ng-show="$index <= getLastSeenFieldIndex() || ($index === getLastSeenFieldIndex() + 1 && fields[$index - 1].isFilledOut())">
           <div class="header" id="<[field.id]>">
             <[field.header]>
           </div>
@@ -53,7 +53,9 @@
           </div>
         </div>
       </div>
-      <button type="button" class="btn btn-default advance-btn" ng-click="goForward()">
+
+      <button type="button" class="btn btn-default advance-btn" ng-click="goForward()"
+              ng-if="getLastSeenFieldId() === currentScrollId">
         <i class="material-icons md-24">&#xE5CF;</i>
       </button>
     </div>

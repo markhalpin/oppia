@@ -28,13 +28,13 @@ oppia.directive('simpleEditorTab', [function() {
     restrict: 'E',
     templateUrl: 'editor/simpleEditorTab',
     controller: [
-      '$scope', '$document', '$anchorScroll', '$window', '$timeout',
-      'EditorModeService', 'explorationTitleService', 'duScrollDuration',
-      'explorationStatesService',
+      '$scope', '$document', '$rootScope', '$anchorScroll', '$window',
+      '$timeout', 'EditorModeService', 'explorationTitleService',
+      'duScrollDuration', 'explorationStatesService',
       function(
-          $scope, $document, $anchorScroll, $window, $timeout,
-          EditorModeService, explorationTitleService, duScrollDuration,
-          explorationStatesService) {
+          $scope, $document, $rootScope, $anchorScroll, $window,
+          $timeout, EditorModeService, explorationTitleService,
+          duScrollDuration, explorationStatesService) {
         $scope.setEditorModeToFull = EditorModeService.setModeToFull;
         $scope.explorationTitleService = explorationTitleService;
         $scope.fields = [];
@@ -55,6 +55,13 @@ oppia.directive('simpleEditorTab', [function() {
           }, 5);
         };
 
+        $scope.currentScrollId = null;
+        $rootScope.$on('duScrollspy:becameActive', function(
+            $event, $element, $target) {
+          $scope.currentScrollId = $target[0].id;
+          $scope.$apply();
+        });
+
         // Scroll the page so that the directive with the given id is in focus.
         var scrollToElement = function(directiveId) {
           $document.scrollToElementAnimated(
@@ -62,17 +69,51 @@ oppia.directive('simpleEditorTab', [function() {
             $scope.defaultScrollOffset);
         };
 
-        // Navigates to the first field that has not been filled yet, and opens
-        // it.
-        $scope.goForward = function() {
-          for (var i = 0; i < $scope.fields.length; i++) {
-            if (!$scope.fields[i].isFilledOut()) {
-              scrollToElement($scope.fields[i].id);
-              $timeout(function() {
-                $scope.$broadcast('externalOpen', $scope.fields[i].id);
-              }, duScrollDuration);
-              return;
+        $scope.getLastSeenFieldIndex = function() {
+          for (var i = $scope.fields.length - 1; i >= 0; i--) {
+            if ($scope.fields[i].isFilledOut() &&
+                !$scope.fields[i].isPrefilled) {
+              return i;
             }
+          }
+          // All fields are unseen.
+          return -1;
+        };
+
+        $scope.getLastSeenFieldId = function() {
+          var lastSeenFieldIndex = $scope.getLastSeenFieldIndex();
+          if (lastSeenFieldIndex === -1) {
+            return null;
+          } else {
+            return $scope.fields[lastSeenFieldIndex].id;
+          }
+        };
+
+        $scope.getFirstUnseenFieldId = function() {
+          var lastSeenFieldIndex = $scope.getLastSeenFieldIndex();
+          if (lastSeenFieldIndex === $scope.fields.length - 1) {
+            return null;
+          } else {
+            return $scope.fields[lastSeenFieldIndex + 1].id;
+          }
+        };
+
+        // The "go forward" button only appears if you are on the last-filled
+        // item on the page, and no subsequent item is filled. Clicking on it
+        // navigates to the next field and opens it.
+        // If all fields have been filled, then the "go forward" button still
+        // appears, and clicking it adds a new question to the stack.
+        $scope.goForward = function() {
+          var firstUnseenFieldId = $scope.getFirstUnseenFieldId();
+          if (firstUnseenFieldId === null) {
+            // TODO(sll): Add a new question here, then scroll to it and open
+            // its editor.
+          } else {
+            // Scroll to the field, and open its editor.
+            scrollToElement(firstUnseenFieldId);
+            $timeout(function() {
+              $scope.$broadcast('externalOpen', firstUnseenFieldId);
+            }, duScrollDuration);
           }
         };
 
@@ -108,6 +149,7 @@ oppia.directive('simpleEditorTab', [function() {
             header: 'What would you like to teach?',
             sidebarLabel: 'Title',
             indentSidebarLabel: false,
+            isPrefilled: false,
             getInitDisplayedValue: function() {
               return explorationTitleService.displayed;
             },
@@ -124,6 +166,7 @@ oppia.directive('simpleEditorTab', [function() {
             header: 'Introduction',
             sidebarLabel: 'Introduction',
             indentSidebarLabel: false,
+            isPrefilled: false,
             getInitDisplayedValue: function() {
               return explorationStatesService.getStateContentMemento(
                 'Introduction')[0].value;
@@ -146,6 +189,7 @@ oppia.directive('simpleEditorTab', [function() {
             header: 'Question 1',
             sidebarLabel: 'Question 1',
             indentSidebarLabel: false,
+            isPrefilled: false,
             getInitDisplayedValue: function() {
               return explorationStatesService.getStateContentMemento(
                 'Question 1')[0].value;
@@ -168,6 +212,7 @@ oppia.directive('simpleEditorTab', [function() {
             header: null,
             sidebarLabel: null,
             indentSidebarLabel: null,
+            isPrefilled: true,
             getInitDisplayedValue: function() {
               return explorationStatesService.getInteractionIdMemento(
                 'Question 1');
@@ -188,6 +233,7 @@ oppia.directive('simpleEditorTab', [function() {
             header: 'Prompt',
             sidebarLabel: 'Prompt',
             indentSidebarLabel: true,
+            isPrefilled: false,
             getInitDisplayedValue: function() {
               return explorationStatesService.getInteractionCustomizationArgs(
                 'Question 1');
@@ -205,6 +251,7 @@ oppia.directive('simpleEditorTab', [function() {
             header: 'Correct Answer',
             sidebarLabel: 'Correct Answer',
             indentSidebarLabel: true,
+            isPrefilled: false,
             getInitDisplayedValue: function() {
             },
             isFilledOut: function() {
@@ -217,6 +264,7 @@ oppia.directive('simpleEditorTab', [function() {
             header: 'Hint',
             sidebarLabel: 'Hint',
             indentSidebarLabel: true,
+            isPrefilled: false,
             getInitDisplayedValue: function() {
             },
             isFilledOut: function() {
