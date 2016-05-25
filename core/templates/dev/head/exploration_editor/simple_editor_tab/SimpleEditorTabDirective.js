@@ -108,6 +108,7 @@ oppia.directive('simpleEditorTab', [function() {
           if (firstUnseenFieldId === null) {
             // TODO(sll): Add a new question here, then scroll to it and open
             // its editor.
+            return;
           } else {
             // Scroll to the field, and open its editor.
             scrollToElement(firstUnseenFieldId);
